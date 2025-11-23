@@ -32,13 +32,13 @@ public class Main {
             dimensionsB = scanner.nextLine();
         }
 
-        temp = dimensionsA.split(" ");
+        temp = dimensionsB.split(" ");
         try {
             if (Integer.parseInt(temp[0]) > 0 && Integer.parseInt(temp[1]) > 0) {
                 dimsB[0] = Integer.parseInt(temp[0]);
                 dimsB[1] = Integer.parseInt(temp[1]);
             } else {
-                System.err.println("Invelid dimensions! Exiting Program...");
+                System.err.println("Invalid dimensions! Exiting Program...");
                 System.exit(0);
             }
         } catch (NumberFormatException e) {
@@ -82,7 +82,7 @@ public class Main {
         }
 
         System.out.println("");
-        double[][] matrixB = new double[dimsA[0]][dimsA[1]];
+        double[][] matrixB = new double[dimsB[0]][dimsB[1]];
         System.out.println("Enter the values for Matrix B, one line at the time, space separated!");
 
         for (int i = 0; i < dimsB[0]; i++) {
@@ -117,7 +117,6 @@ public class Main {
 
         System.out.println("");
         System.out.println("Computing matrix multiplication...");
-        
         MatrixMult matrixMult = new MatrixMult(matrixA, matrixB);
         double[][] result = matrixMult.matrixMult();
         int[] resDims = matrixMult.getResDims();

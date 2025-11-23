@@ -1,13 +1,13 @@
 
 public class MatrixMult {
-    private double[][] matrixA;
-    private int[] dimsA;
-    private double[][] matrixB;
-    private int[] dimsB;
-    private int[] resDims;
+    private final double[][] matrixA;
+    private final int[] dimsA;
+    private final double[][] matrixB;
+    private final int[] dimsB;
+    private final int[] resDims;
 
     public MatrixMult(double[][] matrixA, double[][] matrixB) {
-        this.matrixA = matrixB;
+        this.matrixA = matrixA;
         this.dimsA = new int[2];
         this.matrixB = matrixB;
         this.dimsB = new int[2];
@@ -25,6 +25,8 @@ public class MatrixMult {
         this.resDims[1] = this.dimsB[1];
         for (int i = 0; i < result[0].length; i++) {
             for (int j = 0; j < result.length; j++) {
+                double sum = 0;
+                
                 result[i][j] = sum(this.matrixA[i], this.matrixB[j]);
             }
         } return result;
