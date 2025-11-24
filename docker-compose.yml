@@ -1,10 +1,8 @@
-version: "3.9"
-
 services:
   backend:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
+      context: ./backend
+      # dockerfile: backend/Dockerfile
     container_name: matrix-backend
     ports:
       - "8080:8080"
@@ -13,8 +11,8 @@ services:
 
   frontend:
     build:
-      context: .
-      dockerfile: frontend/Dockerfile
+      context: ./frontend
+      #dockerfile: frontend/Dockerfile
     container_name: matrix-frontend
     ports:
       - "3000:3000"
