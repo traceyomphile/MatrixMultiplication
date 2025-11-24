@@ -1,3 +1,4 @@
+package backend.src.main.java.com.traceyomphile.matrix.service;
 
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
@@ -13,27 +14,21 @@ public class MatrixMult extends RecursiveTask<double[][]> {
     private final int rowEnd;
 
     public MatrixMult(double[][] A, double[][] B) {
-        this(A, B, new double[A.length][B[0].length], 0, A.length);
-        this.THRESHOLD = (int)(A.length * 0.1);
+        this(A, B, new double[A.length][B[0].length], 0, A.length, Math.max(1, (int)(A.length * 0.1)));
     }
 
-    public MatrixMult(double[][] A, double[][] B, double[][] res, int rowSt, int rowEnd) {
+    public MatrixMult(double[][] A, double[][] B, double[][] res, int rowSt, int rowEnd, int threshold) {
         this.matrixA = A;
         this.matrixB = B;
         this.result = res;
         this.rowStart = rowSt;
         this.rowEnd = rowEnd;
+        this.THRESHOLD = threshold;
     }
 
     @Override
     protected double[][] compute() {
         int nuRows = rowEnd - rowStart;
-
-        // Base case 1: Threshold is less than or equal to 1
-        if (THRESHOLD <= 1) {
-            dotProduct(this.rowStart, this.rowEnd);
-            return this.result;
-        }
 
         // Base case: compute these rows sequentially
         if (nuRows <= THRESHOLD) {
@@ -44,8 +39,8 @@ public class MatrixMult extends RecursiveTask<double[][]> {
         // Split in half
         int mid = (this.rowStart + nuRows) / 2;
 
-        MatrixMult left = new MatrixMult(this.matrixA, this.matrixB, this.result, this.rowStart, mid);
-        MatrixMult right = new MatrixMult(this.matrixA, this.matrixB, this.result, mid, this.rowEnd);
+        MatrixMult left = new MatrixMult(this.matrixA, this.matrixB, this.result, this.rowStart, mid, this.THRESHOLD);
+        MatrixMult right = new MatrixMult(this.matrixA, this.matrixB, this.result, mid, this.rowEnd, this.THRESHOLD);
         
         left.fork();
         right.compute();
