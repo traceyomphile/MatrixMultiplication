@@ -1,4 +1,4 @@
-package backend.src.main.java.com.traceyomphile.matrix.service;
+package com.traceyomphile.matrix.service;
 
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;

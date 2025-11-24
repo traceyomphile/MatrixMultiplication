@@ -1,4 +1,4 @@
-package backend.src.main.java.com.traceyomphile.matrix.model;
+package com.traceyomphile.matrix.model;
 
 public class MatrixRequest {
     private double[][] matrixA;

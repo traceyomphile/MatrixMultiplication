@@ -1,8 +1,8 @@
-package backend.src.main.java.com.traceyomphile.matrix.controller;
+package com.traceyomphile.matrix.controller;
 
 
-import backend.src.main.java.com.traceyomphile.matrix.model.MatrixRequest;
-import backend.src.main.java.com.traceyomphile.matrix.service.MatrixMult;
+import com.traceyomphile.matrix.model.MatrixRequest;
+import com.traceyomphile.matrix.service.MatrixMult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
