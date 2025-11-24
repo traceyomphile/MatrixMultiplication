@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./MatrixUI.css";
+//import "./MatrixUI.css";
 
 const generateMatrix = (rows: number, cols: number) =>
   Array.from({ length: rows }, () => Array(cols).fill(0));
