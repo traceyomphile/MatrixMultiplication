@@ -1,22 +1,21 @@
-version: "3.8"
+version: "3.9"
+
 services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+    container_name: matrix-backend
     ports:
       - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
     networks:
       - matrix-net
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+    container_name: matrix-frontend
     ports:
-      - "5173:80"   # maps nginx 80 to host 5173 (match Vite dev port if you prefer)
+      - "3000:3000"
     depends_on:
       - backend
     networks:
