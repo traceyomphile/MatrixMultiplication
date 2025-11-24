@@ -1,0 +1,26 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      # dockerfile: backend/Dockerfile
+    container_name: matrix-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - matrix-net
+
+  frontend:
+    build:
+      context: ./frontend
+      #dockerfile: frontend/Dockerfile
+    container_name: matrix-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - matrix-net
+
+networks:
+  matrix-net:
+    driver: bridge

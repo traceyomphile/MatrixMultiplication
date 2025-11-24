@@ -1,0 +1,20 @@
+# Java / Maven
+backend/target/
+*.class
+*.jar
+*.war
+*.iml
+
+# Node / Frontend
+frontend/node_modules/
+dist/
+.env
+
+# Logs
+*.log
+
+# Docker
+bin/
+
+# VSCode
+.vscode/
