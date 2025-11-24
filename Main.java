@@ -1,6 +1,4 @@
-
 import java.util.Scanner;
-
 
 public class Main {
     
@@ -117,15 +115,13 @@ public class Main {
 
         System.out.println("");
         System.out.println("Computing matrix multiplication...");
-        MatrixMult matrixMult = new MatrixMult(matrixA, matrixB);
-        double[][] result = matrixMult.matrixMult();
-        int[] resDims = matrixMult.getResDims();
+        double[][] result = MatrixMult.multiply(matrixA, matrixB);
 
         System.out.println("");
-        System.out.println("Resulting dimensions: " + resDims[0] + "x" + resDims[1]);
-        for (int i = 0; i < resDims[0]; i++) {
+        System.out.println("Resulting dimensions: " + result.length + "x" + result[0].length);
+        for (int i = 0; i < result.length; i++) {
             String row = "";
-            for (int j = 0; j < resDims[1]; j++) {
+            for (int j = 0; j < result[0].length; j++) {
                 row += result[i][j] + " ";
             }
             System.out.println(row);

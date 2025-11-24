@@ -1,63 +1,80 @@
 
-public class MatrixMult {
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveTask;
+
+public class MatrixMult extends RecursiveTask<double[][]> {
+    private Integer THRESHOLD;
+
     private final double[][] matrixA;
-    private final int[] dimsA;
     private final double[][] matrixB;
-    private final int[] dimsB;
-    private final int[] resDims;
+    private final double[][] result;
 
-    public MatrixMult(double[][] matrixA, double[][] matrixB) {
-        this.matrixA = matrixA;
-        this.dimsA = new int[2];
-        this.matrixB = matrixB;
-        this.dimsB = new int[2];
-        this.resDims = new int[2];
+    private final int rowStart;
+    private final int rowEnd;
+
+    public MatrixMult(double[][] A, double[][] B) {
+        this(A, B, new double[A.length][B[0].length], 0, A.length);
+        this.THRESHOLD = (int)(A.length * 0.1);
     }
 
-    public double[][] matrixMult() {
-        setDims();
-        if (!isCompatible()) {
-            throw new IllegalArgumentException("Matrices are of incompatible dimensions!");
+    public MatrixMult(double[][] A, double[][] B, double[][] res, int rowSt, int rowEnd) {
+        this.matrixA = A;
+        this.matrixB = B;
+        this.result = res;
+        this.rowStart = rowSt;
+        this.rowEnd = rowEnd;
+    }
+
+    @Override
+    protected double[][] compute() {
+        int nuRows = rowEnd - rowStart;
+
+        // Base case 1: Threshold is less than or equal to 1
+        if (THRESHOLD <= 1) {
+            dotProduct(this.rowStart, this.rowEnd);
+            return this.result;
         }
 
-        double[][] result = new double[this.dimsA[0]][this.dimsB[1]];
-        this.resDims[0] = this.dimsA[0];
-        this.resDims[1] = this.dimsB[1];
+        // Base case: compute these rows sequentially
+        if (nuRows <= THRESHOLD) {
+            dotProduct(this.rowStart, this.rowEnd);
+            return this.result;
+        }
 
-        for (int i = 0; i < this.dimsA[0]; i++) {
-            for (int j = 0; j < this.dimsB[1]; j++) {
+        // Split in half
+        int mid = (this.rowStart + nuRows) / 2;
+
+        MatrixMult left = new MatrixMult(this.matrixA, this.matrixB, this.result, this.rowStart, mid);
+        MatrixMult right = new MatrixMult(this.matrixA, this.matrixB, this.result, mid, this.rowEnd);
+        
+        left.fork();
+        right.compute();
+        left.join();
+
+        return this.result;
+    }
+
+    private void dotProduct(int start, int end) {
+        int columnsB = this.matrixB[0].length;
+        int sharedDim = this.matrixA[0].length;
+
+        for (int i = start; i < end; i++) {
+            for (int j = 0; j < columnsB; j++) {
                 double sum = 0;
-                for (int k = 0; k < this.dimsA[1]; k++) {
+                for (int k = 0; k < sharedDim; k++) {
                     sum += (this.matrixA[i][k] * this.matrixB[k][j]);
-                } result[i][j] = sum;
+                } this.result[i][j] = sum;
             }
-        } return result;
-    }
-
-    public void setDims() {
-        // MatrixA Dimensions
-        this.dimsA[0] = this.matrixA.length;
-        this.dimsA[1] = this.matrixA[0].length;
-        // MatrixB Dimensions
-        this.dimsB[0] = this.matrixB.length;
-        this.dimsB[1] = this.matrixB[0].length;
-    }
-
-    public int[] getDims(String matrix) {
-        if (matrix.equals("A")) {
-            return this.dimsA;
-        } else if (matrix.equals("B")) {
-            return this.dimsB;
-        } else {
-            throw new IllegalArgumentException("Argument must be A or B!");
         }
     }
 
-    public int[] getResDims() {
-        return this.resDims;
-    }
+    public static double[][] multiply(double[][] A, double[][] B) {
+        if (A[0].length != B.length) {
+            throw new IllegalArgumentException("Incompatible matrix dimensions!");
+        }
 
-    public boolean isCompatible() {
-        return (this.dimsA[1] == this.dimsB[0]);
+        ForkJoinPool pool = ForkJoinPool.commonPool();
+        MatrixMult task = new MatrixMult(A, B);
+        return pool.invoke(task);
     }
 }
