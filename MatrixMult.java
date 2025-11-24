@@ -23,20 +23,15 @@ public class MatrixMult {
         double[][] result = new double[this.dimsA[0]][this.dimsB[1]];
         this.resDims[0] = this.dimsA[0];
         this.resDims[1] = this.dimsB[1];
-        for (int i = 0; i < result[0].length; i++) {
-            for (int j = 0; j < result.length; j++) {
+
+        for (int i = 0; i < this.dimsA[0]; i++) {
+            for (int j = 0; j < this.dimsB[1]; j++) {
                 double sum = 0;
-                
-                result[i][j] = sum(this.matrixA[i], this.matrixB[j]);
+                for (int k = 0; k < this.dimsA[1]; k++) {
+                    sum += (this.matrixA[i][k] * this.matrixB[k][j]);
+                } result[i][j] = sum;
             }
         } return result;
-    }
-
-    public double sum(double[] row, double[] col) {
-        double sum = 0;
-        for (int i = 0; i < row.length; i++) {
-            sum += (row[i] * col[i]);
-        } return sum;
     }
 
     public void setDims() {
