@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - matrix-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"   # maps nginx 80 to host 5173 (match Vite dev port if you prefer)
+    depends_on:
+      - backend
+    networks:
+      - matrix-net
+
+networks:
+  matrix-net:
+    driver: bridge
